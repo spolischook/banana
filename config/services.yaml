@@ -24,5 +24,19 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Ig\IgFactory:
+        arguments:
+            - '%env(INSTAG_USERNAME)%'
+            - '%env(INSTAG_PASSWORD)%'
+
+    InstagramAPI\Instagram:
+        factory: 'App\Ig\IgFactory:login'
+
+    App\Ig\ItemManager:
+        public: true
+        arguments:
+            $serializer: '@jms_serializer'
+
+    jms_serializer.object_constructor:
+        alias: jms_serializer.doctrine_object_constructor
+        public: true
