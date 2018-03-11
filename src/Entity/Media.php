@@ -22,7 +22,7 @@ class Media
     private $url;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $path;
 
@@ -37,14 +37,14 @@ class Media
     private $height;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="media")
-     */
-    private $comments;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="image_versions2")
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="imageVersions2")
      */
     private $item;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="videoVersions")
+     */
+    private $videoItem;
 
     /**
      * @return mixed
@@ -139,24 +139,6 @@ class Media
     /**
      * @return mixed
      */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
-     * @param mixed $comments
-     * @return Media
-     */
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getItem()
     {
         return $this->item;
@@ -169,6 +151,24 @@ class Media
     public function setItem($item)
     {
         $this->item = $item;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVideoItem()
+    {
+        return $this->videoItem;
+    }
+
+    /**
+     * @param Item $videoItem
+     * @return Media
+     */
+    public function setVideoItem(Item $videoItem): Media
+    {
+        $this->videoItem = $videoItem;
         return $this;
     }
 }

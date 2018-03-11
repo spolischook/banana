@@ -2,13 +2,20 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
  */
 class Item
 {
+    const PHOTO = 1;
+    const VIDEO = 2;
+    const ALBUM = 8;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
@@ -21,19 +28,19 @@ class Item
     private $pk;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $taken_at;
+    private $takenAt;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint", nullable=true)
      */
-    private $device_timestamp;
+    private $deviceTimestamp;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private $media_type;
+    private $mediaType;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -43,22 +50,26 @@ class Item
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $client_cache_key;
+    private $clientCacheKey;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $filter_type;
+    private $filterType;
 
     /**
+     * @JMS\Type("ArrayCollection<App\Entity\Media>")
+     * @JMS\Accessor(getter="getImageVersions2",setter="setImageVersions2")
      * @ORM\OneToMany(targetEntity="Media", mappedBy="item", cascade={"persist"})
      */
-    private $image_versions2;
+    private $imageVersions2;
 
     /**
-     * @ORM\OneToOne(targetEntity="Media", cascade={"persist"})
+     * @JMS\Type("ArrayCollection<App\Entity\Media>")
+     * @JMS\Accessor(getter="getVideoVersions",setter="setVideoVersions")
+     * @ORM\OneToMany(targetEntity="Media", mappedBy="videoItem", cascade={"persist"})
      */
-    private $video_versions;
+    private $videoVersions;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -71,32 +82,35 @@ class Item
     private $video_duration;
 
     /**
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="carousel_parent_id", cascade={"persist"})
+     * @JMS\Type("ArrayCollection<App\Entity\Item>")
+     * @JMS\Accessor(getter="getCarouselMedia",setter="setCarouselMedia")
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="carousel_parent", cascade={"persist"})
      */
     private $carousel_media;
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="carousel_media")
+     * @ORM\JoinColumn(name="carousel_parent_id", referencedColumnName="id")
      */
-    private $carousel_parent_id;
+    private $carousel_parent;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $original_width;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $original_height;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $lat;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $lng;
 
@@ -107,19 +121,31 @@ class Item
     private $user;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text", nullable=true, options={ "collation": "utf8mb4_general_ci" })
      */
     private $caption;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $like_count;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $comment_count;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="item")
+     */
+    private $comments;
+
+    public function __construct()
+    {
+        $this->carousel_media = new ArrayCollection();
+        $this->imageVersions2 = new ArrayCollection();
+        $this->videoVersions = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -162,16 +188,16 @@ class Item
      */
     public function getTakenAt()
     {
-        return $this->taken_at;
+        return $this->takenAt;
     }
 
     /**
-     * @param mixed $taken_at
+     * @param mixed $takenAt
      * @return Item
      */
-    public function setTakenAt($taken_at)
+    public function setTakenAt($takenAt)
     {
-        $this->taken_at = $taken_at;
+        $this->takenAt = $takenAt;
         return $this;
     }
 
@@ -180,16 +206,16 @@ class Item
      */
     public function getDeviceTimestamp()
     {
-        return $this->device_timestamp;
+        return $this->deviceTimestamp;
     }
 
     /**
-     * @param mixed $device_timestamp
+     * @param mixed $deviceTimestamp
      * @return Item
      */
-    public function setDeviceTimestamp($device_timestamp)
+    public function setDeviceTimestamp($deviceTimestamp)
     {
-        $this->device_timestamp = $device_timestamp;
+        $this->deviceTimestamp = $deviceTimestamp;
         return $this;
     }
 
@@ -198,16 +224,16 @@ class Item
      */
     public function getMediaType()
     {
-        return $this->media_type;
+        return $this->mediaType;
     }
 
     /**
-     * @param mixed $media_type
+     * @param mixed $mediaType
      * @return Item
      */
-    public function setMediaType($media_type)
+    public function setMediaType($mediaType)
     {
-        $this->media_type = $media_type;
+        $this->mediaType = $mediaType;
         return $this;
     }
 
@@ -234,16 +260,16 @@ class Item
      */
     public function getClientCacheKey()
     {
-        return $this->client_cache_key;
+        return $this->clientCacheKey;
     }
 
     /**
-     * @param mixed $client_cache_key
+     * @param mixed $clientCacheKey
      * @return Item
      */
-    public function setClientCacheKey($client_cache_key)
+    public function setClientCacheKey($clientCacheKey)
     {
-        $this->client_cache_key = $client_cache_key;
+        $this->clientCacheKey = $clientCacheKey;
         return $this;
     }
 
@@ -252,52 +278,58 @@ class Item
      */
     public function getFilterType()
     {
-        return $this->filter_type;
+        return $this->filterType;
     }
 
     /**
-     * @param mixed $filter_type
+     * @param mixed $filterType
      * @return Item
      */
-    public function setFilterType($filter_type)
+    public function setFilterType($filterType)
     {
-        $this->filter_type = $filter_type;
+        $this->filterType = $filterType;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getImageVersions2()
+    public function getImageVersions2(): ?Collection
     {
-        return $this->image_versions2;
+        return $this->imageVersions2;
     }
 
     /**
-     * @param mixed $image_versions2
+     * @param Collection $imageVersions2
      * @return Item
      */
-    public function setImageVersions2($image_versions2)
+    public function setImageVersions2(Collection $imageVersions2)
     {
-        $this->image_versions2 = $image_versions2;
+        array_map(function (Media $media) {
+            $media->setItem($this);
+        }, $imageVersions2->toArray());
+        $this->imageVersions2 = $imageVersions2;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getVideoVersions()
+    public function getVideoVersions(): ?Collection
     {
-        return $this->video_versions;
+        return $this->videoVersions;
     }
 
     /**
-     * @param mixed $video_versions
+     * @param Collection $videoVersions
      * @return Item
      */
-    public function setVideoVersions($video_versions)
+    public function setVideoVersions(Collection $videoVersions)
     {
-        $this->video_versions = $video_versions;
+        array_map(function(Media $media) {
+            $media->setVideoItem($this);
+        }, $videoVersions->toArray());
+        $this->videoVersions = $videoVersions;
         return $this;
     }
 
@@ -340,7 +372,7 @@ class Item
     /**
      * @return mixed
      */
-    public function getCarouselMedia()
+    public function getCarouselMedia(): ?   Collection
     {
         return $this->carousel_media;
     }
@@ -349,8 +381,11 @@ class Item
      * @param mixed $carousel_media
      * @return Item
      */
-    public function setCarouselMedia($carousel_media)
+    public function setCarouselMedia(Collection $carousel_media)
     {
+        array_map(function (Item $item) {
+            $item->setCarouselParent($this);
+        }, $carousel_media->toArray());
         $this->carousel_media = $carousel_media;
         return $this;
     }
@@ -358,18 +393,18 @@ class Item
     /**
      * @return mixed
      */
-    public function getCarouselParentId()
+    public function getCarouselParent()
     {
-        return $this->carousel_parent_id;
+        return $this->carousel_parent;
     }
 
     /**
-     * @param mixed $carousel_parent_id
+     * @param mixed $carousel_parent
      * @return Item
      */
-    public function setCarouselParentId($carousel_parent_id)
+    public function setCarouselParent($carousel_parent)
     {
-        $this->carousel_parent_id = $carousel_parent_id;
+        $this->carousel_parent = $carousel_parent;
         return $this;
     }
 
@@ -514,6 +549,24 @@ class Item
     public function setCommentCount($comment_count)
     {
         $this->comment_count = $comment_count;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param mixed $comments
+     * @return Item
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
         return $this;
     }
 }

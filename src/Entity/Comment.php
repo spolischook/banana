@@ -46,9 +46,9 @@ class Comment
     private $did_report_as_spam;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Media", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="comments")
      */
-    private $media;
+    private $item;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -185,18 +185,18 @@ class Comment
     /**
      * @return mixed
      */
-    public function getMedia()
+    public function getItem()
     {
-        return $this->media;
+        return $this->item;
     }
 
     /**
-     * @param mixed $media
+     * @param mixed $item
      * @return Comment
      */
-    public function setMedia($media)
+    public function setItem($item)
     {
-        $this->media = $media;
+        $this->item = $item;
         return $this;
     }
 
