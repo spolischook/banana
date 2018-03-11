@@ -28,14 +28,13 @@ class ItemManager
         $this->em = $em;
     }
 
-    public function updateOrCreate(string $json)
+    public function updateOrCreate(string $json): Item
     {
-        $id = json_decode($json, true)['id'];
-        $item = $this->em->getRepository(Item::class)->find($id) ?: new Item();
-
         $item = $this->serializer->deserialize($json, Item::class, 'json');
 
+        $this->em->persist($item);
+        $this->em->flush();
 
-        var_dump($item);
+        return $item;
     }
 }

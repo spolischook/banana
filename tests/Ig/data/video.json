@@ -1,0 +1,156 @@
+{
+    "taken_at": "1520159993",
+    "pk": "1727542950572680790",
+    "id": "1727542950572680790_499678136",
+    "device_timestamp": "1520159189",
+    "media_type": 2,
+    "code": "Bf5dykfHWZW",
+    "client_cache_key": "MTcyNzU0Mjk1MDU3MjY4MDc5MA==.2",
+    "filter_type": 0,
+    "image_versions2": {
+        "candidates": [
+            {
+                "width": 640,
+                "height": 640,
+                "url": "https://instagram.furt1-1.fna.fbcdn.net/vp/ae044f16c07a13e0b3f08a7992bd3b62/5AA4C20F/t51.2885-15/s640x640/e15/28432719_413603279061274_4426538405022662656_n.jpg?ig_cache_key=MTcyNzU0Mjk1MDU3MjY4MDc5MA%3D%3D.2"
+            },
+            {
+                "width": 240,
+                "height": 240,
+                "url": "https://instagram.furt1-1.fna.fbcdn.net/vp/8911edf9c8fd8b15f98009f43a72d342/5AA51DC1/t51.2885-15/s240x240/e15/28432719_413603279061274_4426538405022662656_n.jpg?ig_cache_key=MTcyNzU0Mjk1MDU3MjY4MDc5MA%3D%3D.2"
+            }
+        ]
+    },
+    "original_width": 720,
+    "original_height": 720,
+    "video_versions": [
+        {
+            "type": 101,
+            "width": 640,
+            "height": 640,
+            "url": "https://instagram.furt1-1.fna.fbcdn.net/vp/96604f84c767267fde63c4a88186daad/5AA5A5DB/t50.2886-16/28552531_276334532902243_172719150576173056_n.mp4",
+            "id": "17867832337222184"
+        },
+        {
+            "type": 103,
+            "width": 480,
+            "height": 480,
+            "url": "https://instagram.furt1-1.fna.fbcdn.net/vp/e692c67bc2443aceb867b4bb75f0766b/5AA4A55F/t50.2886-16/28838967_905061106338645_586566166105817088_n.mp4",
+            "id": "17927893477018227"
+        },
+        {
+            "type": 102,
+            "width": 480,
+            "height": 480,
+            "url": "https://instagram.furt1-1.fna.fbcdn.net/vp/e692c67bc2443aceb867b4bb75f0766b/5AA4A55F/t50.2886-16/28838967_905061106338645_586566166105817088_n.mp4",
+            "id": "17927893477018227"
+        }
+    ],
+    "has_audio": true,
+    "video_duration": 60,
+    "location": {
+        "pk": "213085667",
+        "name": "Ko Samui",
+        "address": "",
+        "city": "",
+        "short_name": "Ko Samui",
+        "lng": 99.9667,
+        "lat": 9.43333,
+        "external_source": "facebook_places",
+        "facebook_places_id": "103126043060298"
+    },
+    "view_count": 174,
+    "lat": 9.43333,
+    "lng": 99.9667,
+    "user": {
+        "pk": "499678136",
+        "username": "tetianacherevan",
+        "full_name": "Tetiana Cherevan",
+        "is_private": false,
+        "profile_pic_url": "https://instagram.furt1-1.fna.fbcdn.net/vp/efb53cff0885d5520a6fae63d187e129/5B3FB2C9/t51.2885-19/s150x150/28151713_814590292063777_5613944837704253440_n.jpg",
+        "profile_pic_id": "1684455320637551840_499678136",
+        "is_verified": false,
+        "has_anonymous_profile_picture": false,
+        "can_boost_post": false,
+        "can_see_organic_insights": false,
+        "show_insights_terms": false,
+        "is_unpublished": false,
+        "allowed_commenter_type": "any"
+    },
+    "can_viewer_reshare": true,
+    "caption": {
+        "pk": "17903898736191358",
+        "user_id": "499678136",
+        "text": "Привет, друзья) Сегодня такой красивенный вечерний свет падал на мои работы, что я не удержалась и сняла видео.\nЯ много уделяю времени деталям, а может и мало, в сравнении с тонкой работой художников эпохи Возрождения. Я могу подолгу сидеть и смотреть на незаконченную работу, часами.\nУ каждого свой взгляд. Одни рисуют политику и ваши страхи🖤, другие рисуют мечты  и ваши приятные мгновения ❤️\nЕще понаблюдаю за этими работами) и через несколько дней сниму, чтоб натянуть новые полотна ) У меня здесь три подрамника. Всегда удобней писать несколько работ вместе. 💛 . .\n\n#artforsale #samui #artlife #painter #tetianacherevan # #painter #galeryart #vscoart #myspace #workandtravel  #interiordesign  #art #gallery  #painter  #interiordesign #tetianacherevan \n#ukraina #homedecor #artforsale #artistlife #artcurator #makersmovement #artoftheday #artgram #like4like",
+        "type": 1,
+        "created_at": "1520159994",
+        "created_at_utc": "1520159994",
+        "content_type": "comment",
+        "status": "Active",
+        "bit_flags": 0,
+        "user": {
+            "pk": "499678136",
+            "username": "tetianacherevan",
+            "full_name": "Tetiana Cherevan",
+            "is_private": false,
+            "profile_pic_url": "https://instagram.furt1-1.fna.fbcdn.net/vp/efb53cff0885d5520a6fae63d187e129/5B3FB2C9/t51.2885-19/s150x150/28151713_814590292063777_5613944837704253440_n.jpg",
+            "profile_pic_id": "1684455320637551840_499678136",
+            "is_verified": false,
+            "has_anonymous_profile_picture": false,
+            "can_boost_post": false,
+            "can_see_organic_insights": false,
+            "show_insights_terms": false,
+            "is_unpublished": false,
+            "allowed_commenter_type": "any"
+        },
+        "did_report_as_spam": false,
+        "media_id": "1727542950572680790",
+        "has_translation": true
+    },
+    "caption_is_edited": false,
+    "like_count": 63,
+    "has_liked": false,
+    "top_likers": [
+        "marta_trotsiuk",
+        "valkawild",
+        "cookandshare"
+    ],
+    "comment_likes_enabled": true,
+    "comment_threading_enabled": true,
+    "has_more_comments": true,
+    "next_max_id": "17901443665156568",
+    "max_num_visible_preview_comments": 2,
+    "preview_comments": [
+        {
+            "pk": "17901443665156568",
+            "user_id": "499678136",
+            "text": "@natazalozna мне тоже нравиться☺️))) еще немного и закончу вторую работу.",
+            "type": 2,
+            "created_at": "1520229462",
+            "created_at_utc": "1520229462",
+            "content_type": "comment",
+            "status": "Active",
+            "bit_flags": 0,
+            "user": {
+                "pk": "499678136",
+                "username": "tetianacherevan",
+                "full_name": "Tetiana Cherevan",
+                "is_private": false,
+                "profile_pic_url": "https://instagram.furt1-1.fna.fbcdn.net/vp/efb53cff0885d5520a6fae63d187e129/5B3FB2C9/t51.2885-19/s150x150/28151713_814590292063777_5613944837704253440_n.jpg",
+                "profile_pic_id": "1684455320637551840_499678136",
+                "is_verified": false
+            },
+            "did_report_as_spam": false,
+            "media_id": "1727542950572680790",
+            "has_translation": true
+        }
+    ],
+    "comment_count": 2,
+    "inline_composer_display_condition": "impression_trigger",
+    "photo_of_you": false,
+    "can_viewer_save": true,
+    "organic_tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6ImQzYTM4MjZiMDAxOTQzODc5YTkxNjZhMDc5OGZkMDJlMTcyNzU0Mjk1MDU3MjY4MDc5MCIsInNlcnZlcl90b2tlbiI6IjE1MjA2MDc0MTExNzR8MTcyNzU0Mjk1MDU3MjY4MDc5MHw0OTk2NzgxMzZ8ZDUwMmY1YTI0MjIzNDViYTg3Y2JjZDVmMzdjYjIyNWFiZmIyYmU2MWRhMGFkNmU0ZjAyNTAyYmExZTk4ODMxOSJ9LCJzaWduYXR1cmUiOiIifQ==",
+    "is_dash_eligible": 1,
+    "video_dash_manifest": "<MPD xmlns=\"urn:mpeg:dash:schema:mpd:2011\" minBufferTime=\"PT1.500S\" type=\"static\" mediaPresentationDuration=\"PT0H1M0.163S\" maxSegmentDuration=\"PT0H0M2.000S\" profiles=\"urn:mpeg:dash:profile:isoff-on-demand:2011,http://dashif.org/guidelines/dash264\"><Period duration=\"PT0H1M0.163S\"><AdaptationSet segmentAlignment=\"true\" maxWidth=\"640\" maxHeight=\"640\" maxFrameRate=\"30\" par=\"1:1\" lang=\"und\" subsegmentAlignment=\"true\" subsegmentStartsWithSAP=\"1\"><Representation id=\"17915209735105629vd\" mimeType=\"video/mp4\" codecs=\"avc1.4d401e\" width=\"640\" height=\"640\" frameRate=\"30\" sar=\"1:1\" startWithSAP=\"1\" bandwidth=\"1750653\" FBQualityClass=\"sd\" FBQualityLabel=\"640w\"><BaseURL>https://instagram.furt1-1.fna.fbcdn.net/vp/3fcb7a3c9b0dd44789ba769e5e6b5c40/5AA54344/t50.2886-16/28255742_557738364601872_2755900035658533291_n.mp4</BaseURL><SegmentBase indexRangeExact=\"true\" indexRange=\"910-1301\"><Initialization range=\"0-909\"/></SegmentBase></Representation><Representation id=\"17927309638053987v\" mimeType=\"video/mp4\" codecs=\"avc1.4d401e\" width=\"480\" height=\"480\" frameRate=\"30\" sar=\"1:1\" startWithSAP=\"1\" bandwidth=\"1089937\" FBQualityClass=\"sd\" FBQualityLabel=\"480w\"><BaseURL>https://instagram.furt1-1.fna.fbcdn.net/vp/bff37fa22e9843086f195e2f85f59efc/5AA53947/t50.2886-16/28687827_1670545646374041_4379194436932289327_n.mp4</BaseURL><SegmentBase indexRangeExact=\"true\" indexRange=\"910-1301\"><Initialization range=\"0-909\"/></SegmentBase></Representation><Representation id=\"17903940370141393v\" mimeType=\"video/mp4\" codecs=\"avc1.4d401e\" width=\"320\" height=\"320\" frameRate=\"30\" sar=\"1:1\" startWithSAP=\"1\" bandwidth=\"519052\" FBQualityClass=\"sd\" FBQualityLabel=\"320w\"><BaseURL>https://instagram.furt1-1.fna.fbcdn.net/vp/449b63c1d0e2f6233fba3d29a6036d3f/5AA5B784/t50.2886-16/28550027_358682147874067_1974968937864378183_n.mp4</BaseURL><SegmentBase indexRangeExact=\"true\" indexRange=\"910-1301\"><Initialization range=\"0-909\"/></SegmentBase></Representation></AdaptationSet><AdaptationSet segmentAlignment=\"true\" lang=\"und\" subsegmentAlignment=\"true\" subsegmentStartsWithSAP=\"1\"><Representation id=\"17920795195072518ad\" mimeType=\"audio/mp4\" codecs=\"mp4a.40.2\" audioSamplingRate=\"44100\" startWithSAP=\"1\" bandwidth=\"65935\"><AudioChannelConfiguration schemeIdUri=\"urn:mpeg:dash:23003:3:audio_channel_configuration:2011\" value=\"2\"/><BaseURL>https://instagram.furt1-1.fna.fbcdn.net/vp/4eb75f153ac0826946ba52d15dc94020/5AA4B4E9/t50.2886-16/28838783_185419878737683_1945642649615915515_n.mp4</BaseURL><SegmentBase indexRangeExact=\"true\" indexRange=\"832-1235\"><Initialization range=\"0-831\"/></SegmentBase></Representation></AdaptationSet></Period></MPD>",
+    "number_of_qualities": 3
+}
