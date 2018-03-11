@@ -40,3 +40,7 @@ services:
     jms_serializer.object_constructor:
         alias: jms_serializer.doctrine_object_constructor
         public: true
+
+    App\Serializer\ItemDeserializationSubscriber:
+        tags:
+            - { name: jms_serializer.event_subscriber }
