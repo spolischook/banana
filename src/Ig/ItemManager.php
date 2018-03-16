@@ -14,17 +14,15 @@ class ItemManager
      * @var Serializer
      */
     private $serializer;
-    private $ig;
 
     /**
      * @var EntityManager
      */
     private $em;
 
-    public function __construct(Serializer $serializer, Instagram $ig, ObjectManager $em)
+    public function __construct(Serializer $serializer, ObjectManager $em)
     {
         $this->serializer = $serializer;
-        $this->ig = $ig;
         $this->em = $em;
     }
 

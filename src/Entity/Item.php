@@ -115,7 +115,7 @@ class Item
     private $lng;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="items", cascade={"persist"})
      * @ORM\JoinColumn(name="user_pk", referencedColumnName="pk")
      */
     private $user;
@@ -131,6 +131,11 @@ class Item
     private $like_count;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $hasLiked = false;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $comment_count;
@@ -140,11 +145,22 @@ class Item
      */
     private $comments;
 
+    /**
+     * @var Collection|User[]
+     * @ORM\ManyToMany(targetEntity="User", cascade={"persist", "merge"})
+     * @ORM\JoinTable(name="items_users_likers",
+     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="pk")}
+     * )
+     */
+    private $likers;
+
     public function __construct()
     {
         $this->carousel_media = new ArrayCollection();
         $this->imageVersions2 = new ArrayCollection();
         $this->videoVersions = new ArrayCollection();
+        $this->likers = new ArrayCollection();
     }
 
     /**
@@ -535,6 +551,24 @@ class Item
     }
 
     /**
+     * @return boolean
+     */
+    public function getHasLiked()
+    {
+        return $this->hasLiked;
+    }
+
+    /**
+     * @param boolean $hasLiked
+     * @return Item
+     */
+    public function setHasLiked($hasLiked): Item
+    {
+        $this->hasLiked = $hasLiked;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getCommentCount()
@@ -567,6 +601,45 @@ class Item
     public function setComments($comments)
     {
         $this->comments = $comments;
+        return $this;
+    }
+
+    /**
+     * @return User[]|Collection
+     */
+    public function getLikers()
+    {
+        return $this->likers;
+    }
+
+    public function addLiker(User $user)
+    {
+        // todo: Remove this after fix serialization issues
+        if ($this->likers === null) {
+            $this->likers = new ArrayCollection();
+        }
+
+        if (!$this->isLiker($user)) {
+            $this->likers->add($user);
+        }
+
+        return $this;
+    }
+
+    public function isLiker(User $user): bool
+    {
+        return 0 < $this->likers->filter(function (User $u) use ($user) {
+            return $u->getPk() === $user->getPk();
+        })->count();
+    }
+
+    /**
+     * @param User[]|Collection $likers
+     * @return Item
+     */
+    public function setLikers($likers)
+    {
+        $this->likers = $likers;
         return $this;
     }
 }

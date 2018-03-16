@@ -129,3 +129,25 @@ body {
 
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.card-columns {
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    column-count: 2;
+  }
+
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) {
+    column-count: 3;
+  }
+
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) {
+    column-count: 4;
+  }
+
+  // Extra large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) {
+    column-count: 5;
+  }
+}

@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{user.full_name}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="card" *ngFor="let item of user.items">
+      <img *ngIf="item.media_type == itemMediaType.PHOTO" src="{{item.image_versions2[0].url}}" width="100%" class="img-thumbnail">
+      <video *ngIf="item.media_type == itemMediaType.VIDEO">
+        <source src="{{item.video_versions[0].url}}" type="video/mp4">
+      </video>
+      <ngb-carousel *ngIf="item.media_type == itemMediaType.ALBUM">
+        <ng-template ngbSlide *ngFor="let mediaItem of item.carousel_media">
+          <img *ngIf="mediaItem.media_type == itemMediaType.PHOTO"
+               src="{{mediaItem.image_versions2[0].url}}" width="100%" class="img-thumbnail">
+          <video *ngIf="mediaItem.media_type == itemMediaType.VIDEO">
+            <source src="{{mediaItem.video_versions[0].url}}" type="video/mp4">
+          </video>
+        </ng-template>
+      </ngb-carousel>
+      <div class="card-body">
+        <h6>
+          {{item.caption}}
+          <!--<span class="badge badge-success" *ngIf="user.is_follower">Follower</span>-->
+          <!--<span class="badge badge-secondary" *ngIf="!user.is_follower">Foreigner</span>-->
+        </h6>
+      </div>
+    </div>
+</div>
+<div class="modal-footer">
+  <button (click)="acceptUser(user)" type="button" class="btn btn-success">Ok</button>
+  <button (click)="declineUser(user)" type="button" class="btn btn-danger">Not interested</button>
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

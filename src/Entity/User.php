@@ -2,18 +2,30 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User
 {
+    const INTERESTING_USER = 2;
+    const IGNORING_USER = 3;
+    const BOT_OR_BUSINESS = 8;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
      */
     private $pk;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $userType;
 
     /**
      * @ORM\Column(type="string")
@@ -24,6 +36,12 @@ class User
      * @ORM\Column(type="string", options={ "collation": "utf8mb4_general_ci" })
      */
     private $full_name;
+
+    /**
+     * @var Item[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Item", mappedBy="user")
+     */
+    private $items;
 
     /**
      * @ORM\Column(type="boolean")
@@ -41,7 +59,7 @@ class User
     private $profile_pic_url;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $profile_pic_id;
 
@@ -66,7 +84,7 @@ class User
     private $is_business;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="text", nullable=true, options={ "collation": "utf8mb4_general_ci" })
      */
     private $biography;
 
@@ -79,6 +97,17 @@ class User
      * @ORM\Column(type="integer", nullable=true)
      */
     private $usertags_count;
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $isFollower = false;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -131,6 +160,24 @@ class User
     public function setFullName($full_name)
     {
         $this->full_name = $full_name;
+        return $this;
+    }
+
+    /**
+     * @return Item[]|Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param Item[]|Collection $items
+     * @return User
+     */
+    public function setItems($items): User
+    {
+        $this->items = $items;
         return $this;
     }
 
@@ -329,6 +376,42 @@ class User
     public function setUsertagsCount($usertags_count)
     {
         $this->usertags_count = $usertags_count;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserType()
+    {
+        return $this->userType;
+    }
+
+    /**
+     * @param mixed $userType
+     * @return User
+     */
+    public function setUserType($userType): User
+    {
+        $this->userType = $userType;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFollower(): bool
+    {
+        return $this->isFollower;
+    }
+
+    /**
+     * @param bool $isFollower
+     * @return User
+     */
+    public function setIsFollower(bool $isFollower): User
+    {
+        $this->isFollower = $isFollower;
         return $this;
     }
 }

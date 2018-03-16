@@ -11,6 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardMainMenuComponent } from './dashboard-main-menu/dashboard-main-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DiscoverHashTagComponent } from './discover-hash-tag/discover-hash-tag.component';
+import { DiscoverUsersComponent } from './discover-users/discover-users.component';
+import { DiscoverUsersModalComponent } from './discover-users-modal/discover-users-modal.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { DiscoverHashTagComponent } from './discover-hash-tag/discover-hash-tag.
     AppComponent,
     DashboardComponent,
     DashboardMainMenuComponent,
-    DiscoverHashTagComponent
+    DiscoverHashTagComponent,
+    DiscoverUsersComponent,
+    DiscoverUsersModalComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +33,10 @@ import { DiscoverHashTagComponent } from './discover-hash-tag/discover-hash-tag.
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+      AppComponent,
+      DiscoverUsersModalComponent
+  ]
 })
 export class AppModule { }

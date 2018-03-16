@@ -24,23 +24,54 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    App\Ig\IgFactory:
+    App\Ig\IgSingleton:
         arguments:
             - '%env(INSTAG_USERNAME)%'
             - '%env(INSTAG_PASSWORD)%'
 
-    InstagramAPI\Instagram:
-        factory: 'App\Ig\IgFactory:login'
-
-    App\Ig\ItemManager:
-        public: true
-        arguments:
-            $serializer: '@jms_serializer'
+#    InstagramAPI\Instagram:
+#        factory: 'App\Ig\IgFactory:login'
 
     jms_serializer.object_constructor:
         alias: jms_serializer.doctrine_object_constructor
         public: true
 
-    App\Serializer\ItemDeserializationSubscriber:
+    JMS\Serializer\Serializer:
+        alias: jms_serializer
+
+    App\Serializer\EventSubscriber\ItemDeserializationSubscriber:
         tags:
             - { name: jms_serializer.event_subscriber }
+
+    App\Serializer\EventSubscriber\UserDeserializationSubscriber:
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    OldSound\RabbitMqBundle\RabbitMq\Producer:
+        alias: old_sound_rabbit_mq.task_producer
+
+    App\EventListener\InterestingUserTaskListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+    App\Consumer\TaskConsumer:
+        arguments:
+            - "@logger"
+            - "@serializer"
+            - !tagged app.queue_processor
+
+    App\Consumer\Processor\TouchUserProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\DiscoverPeopleProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UpdateMyFeedProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UpdateMyItemProcessor:
+        tags:
+            - { name: app.queue_processor }

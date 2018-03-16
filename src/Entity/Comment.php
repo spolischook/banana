@@ -16,7 +16,7 @@ class Comment
     private $pk;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text", options={ "collation": "utf8mb4_general_ci" })
      */
     private $text;
 
@@ -51,10 +51,16 @@ class Comment
     private $item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
      * @ORM\JoinColumn(name="user_pk", referencedColumnName="pk")
      */
     private $user;
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $pending = false;
 
     /**
      * @return mixed
@@ -215,6 +221,24 @@ class Comment
     public function setUser($user)
     {
         $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending(): bool
+    {
+        return $this->pending;
+    }
+
+    /**
+     * @param bool $pending
+     * @return Comment
+     */
+    public function setPending(bool $pending): Comment
+    {
+        $this->pending = $pending;
         return $this;
     }
 }

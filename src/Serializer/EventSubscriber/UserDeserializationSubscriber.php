@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Serializer;
+namespace App\Serializer\EventSubscriber;
 
-use App\Entity\Item;
+use App\Entity\User;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 
-class ItemDeserializationSubscriber implements EventSubscriberInterface
+class UserDeserializationSubscriber implements EventSubscriberInterface
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class ItemDeserializationSubscriber implements EventSubscriberInterface
                 'event' => 'serializer.pre_deserialize',
                 'method' => 'onPreDeserialize',
                 'format' => 'json',
-                'class' => Item::class,
+                'class' => User::class,
             ]
         ];
     }
@@ -27,16 +27,8 @@ class ItemDeserializationSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
-        if (isset($data['caption']['text'])) {
-            $data['caption'] = $data['caption']['text'];
-        }
-
-        if (isset($data['image_versions2']['candidates'])) {
-            $data['image_versions2'] = $data['image_versions2']['candidates'];
-        }
-
-        if (isset($data['image_versions2']['candidates'])) {
-            $data['image_versions2'] = $data['image_versions2']['candidates'];
+        if (isset($data['user'])) {
+            $data = $data['user'];
         }
 
         $event->setData($data);
