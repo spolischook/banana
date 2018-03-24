@@ -6,20 +6,21 @@
 </div>
 <div class="modal-body">
     <div class="card" *ngFor="let item of user.items">
-      <img *ngIf="item.media_type == itemMediaType.PHOTO" src="{{item.image_versions2[0].url}}" width="100%" class="img-thumbnail">
+      <img *ngIf="item.media_type == itemMediaType.PHOTO" src="{{item.image_versions2[1].url}}" width="100%" class="img-thumbnail">
       <video *ngIf="item.media_type == itemMediaType.VIDEO">
-        <source src="{{item.video_versions[0].url}}" type="video/mp4">
+        <source src="{{item.video_versions[1].url}}" type="video/mp4">
       </video>
       <ngb-carousel *ngIf="item.media_type == itemMediaType.ALBUM">
         <ng-template ngbSlide *ngFor="let mediaItem of item.carousel_media">
           <img *ngIf="mediaItem.media_type == itemMediaType.PHOTO"
-               src="{{mediaItem.image_versions2[0].url}}" width="100%" class="img-thumbnail">
+               src="{{mediaItem.image_versions2[1].url}}" width="100%" class="img-thumbnail">
           <video *ngIf="mediaItem.media_type == itemMediaType.VIDEO">
-            <source src="{{mediaItem.video_versions[0].url}}" type="video/mp4">
+            <source src="{{mediaItem.video_versions[1].url}}" type="video/mp4">
           </video>
         </ng-template>
       </ngb-carousel>
       <div class="card-body">
+        <div><i-heart></i-heart> <strong>{{item.like_count}}</strong> likes</div>
         <h6>
           {{item.caption}}
           <!--<span class="badge badge-success" *ngIf="user.is_follower">Follower</span>-->

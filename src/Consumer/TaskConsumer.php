@@ -2,6 +2,7 @@
 
 namespace App\Consumer;
 
+use App\Consumer\Processor\Message\MessageInterface;
 use App\Consumer\Processor\MessageProcessorInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -37,8 +38,8 @@ class TaskConsumer implements ConsumerInterface
         $this->logger->info('Message received: '.$msg->getBody());
 
         try {
-            /** @var Message $message */
-            $message = $this->serializer->deserialize($msg->getBody(), Message::class, 'json');
+            /** @var MessageInterface $message */
+            $message = unserialize(json_decode($msg->getBody()));
 
             foreach ($this->processors as $processor) {
                 if ($processor->support($message)) {

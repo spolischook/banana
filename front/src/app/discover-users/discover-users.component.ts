@@ -40,6 +40,7 @@ export class DiscoverUsersComponent implements OnInit {
       newUser.user_type = UserType.INTERESTING_USER;
 
       this.updateUser(newUser);
+      user.user_type = UserType.INTERESTING_USER;
   }
 
   public setAsNotInteresting(user: User) {
@@ -48,6 +49,7 @@ export class DiscoverUsersComponent implements OnInit {
       newUser.user_type = UserType.IGNORING_USER;
 
       this.updateUser(newUser);
+      user.user_type = UserType.IGNORING_USER;
   }
 
   public updateUser(user: User) {

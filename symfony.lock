@@ -119,6 +119,9 @@
     "mgp25/instagram-php": {
         "version": "dev-master"
     },
+    "mongodb/mongodb": {
+        "version": "1.3.0"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },

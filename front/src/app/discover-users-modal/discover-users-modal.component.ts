@@ -26,6 +26,8 @@ export class DiscoverUsersModalComponent implements OnInit {
       newUser.pk = user.pk;
       newUser.user_type = UserType.INTERESTING_USER;
     this.decision.emit(newUser);
+    this.activeModal.close();
+      user.user_type = UserType.INTERESTING_USER;
   }
 
   public declineUser(user: User) {
@@ -33,5 +35,7 @@ export class DiscoverUsersModalComponent implements OnInit {
       newUser.pk = user.pk;
       newUser.user_type = UserType.IGNORING_USER;
     this.decision.emit(newUser);
+    this.activeModal.close();
+    user.user_type = UserType.IGNORING_USER;
   }
 }

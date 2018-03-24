@@ -1,6 +1,7 @@
 import {Item} from "./Item";
 
 export enum UserType {
+    PADDING = 1,
     INTERESTING_USER = 2,
     IGNORING_USER = 3,
     BOT_OR_BUSINESS = 8,

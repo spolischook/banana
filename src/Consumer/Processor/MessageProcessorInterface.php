@@ -2,11 +2,14 @@
 
 namespace App\Consumer\Processor;
 
-use App\Consumer\Message;
+use App\Consumer\Processor\Message\MessageInterface;
 
 interface MessageProcessorInterface
 {
-    public function process(Message $message): void;
+    /**
+     * @param MessageInterface $message
+     */
+    public function process(MessageInterface $message): void;
 
-    public function support(Message $message): bool;
+    public function support(MessageInterface $message): bool;
 }

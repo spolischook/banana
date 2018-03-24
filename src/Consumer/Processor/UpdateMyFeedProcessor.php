@@ -2,15 +2,16 @@
 
 namespace App\Consumer\Processor;
 
-use App\Consumer\Message;
+use App\Consumer\Processor\Message\MessageInterface;
+use App\Consumer\Processor\Message\UpdateItemMessage;
+use App\Consumer\Processor\Message\UpdateMyFeedMessage;
 use App\Ig\IgSingleton;
 use InstagramAPI\Instagram;
-use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use App\Producer;
 use Psr\Log\LoggerInterface;
 
 class UpdateMyFeedProcessor extends AbstractProcessor
 {
-    protected $type = 'update_my_feed';
     protected $logger;
     /** @var Instagram */
     protected $ig;
@@ -26,16 +27,22 @@ class UpdateMyFeedProcessor extends AbstractProcessor
         $this->producer = $producer;
     }
 
-    public function process(Message $message): void
+    /**
+     * @param MessageInterface|UpdateMyFeedMessage $message
+     */
+    public function process(MessageInterface $message): void
     {
-        $this->logger->warning('Update the my feed');
-        $maxId = $message->data['maxId'];
+        $this->logger->warning(sprintf(
+            'Update "%s" page of my feed',
+            $message->getPageNumber() === null ? 'infinity' : $message->getPageNumber()
+        ));
+        $maxId = $message->getMaxId();
 
         $response = $this->ig->timeline->getSelfUserFeed($maxId);
         foreach ($response->getItems() as $item) {
-            $message = new Message('update_my_item');
-            $message->data = ['itemId' => $item->getId()];
-            $this->producer->publish(json_encode($message));
+            $updateItemMessage = new UpdateItemMessage();
+            $updateItemMessage->setItemId($item->getId());
+            $this->producer->publish($updateItemMessage);
         }
 
         $maxId = $response->getNextMaxId();
@@ -45,10 +52,21 @@ class UpdateMyFeedProcessor extends AbstractProcessor
             return;
         }
 
-        $message = new Message($this->type);
-        $message->data = ['maxId' => $maxId];
-        $this->producer->publish(json_encode($message));
+        $nextMessage = new UpdateMyFeedMessage();
+        $nextMessage
+            ->setMaxId($maxId)
+            ->setPageNumber($message->getPageNumber())
+            ->decreasePageNumber();
+
+        if (0 !== $message->getPageNumber()) {
+            $this->producer->publish($nextMessage);
+        }
 
         $this->waitFor(5, 10, 'Wait after update feed');
+    }
+
+    protected function getSupportedMessages(): array
+    {
+        return [UpdateMyFeedMessage::class];
     }
 }

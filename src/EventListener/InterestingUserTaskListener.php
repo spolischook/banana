@@ -3,9 +3,10 @@
 namespace App\EventListener;
 
 use App\Consumer\Message;
+use App\Consumer\Processor\Message\TouchUserMessage;
 use App\Entity\User;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use App\Producer;
 
 class InterestingUserTaskListener
 {
@@ -39,11 +40,11 @@ class InterestingUserTaskListener
 
             list($oldValue, $newValue) = $changeSet['userType'];
 
-            if (null === $oldValue && User::INTERESTING_USER === $newValue) {
-                $message = new Message('touch_user');
-                $message->data = ['userId' => $entity->getPk()];
+            if (User::FOUND === $oldValue && User::INTERESTING_USER === $newValue) {
+                $message = new TouchUserMessage();
+                $message->setUserId($entity->getPk());
 
-                $this->producer->publish(json_encode($message));
+                $this->producer->publish($message);
             }
         }
     }

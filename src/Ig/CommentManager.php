@@ -2,13 +2,14 @@
 
 namespace App\Ig;
 
+use App\Entity\Comment;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use InstagramAPI\Instagram;
 use JMS\Serializer\Serializer;
 
-class UserManager
+class CommentManager
 {
     /**
      * @var Serializer
@@ -26,18 +27,13 @@ class UserManager
         $this->em = $em;
     }
 
-    public function updateOrCreate(string $json): User
+    public function updateOrCreate(string $json): Comment
     {
-        $user = $this->serializer->deserialize($json, User::class, 'json');
+        $user = $this->serializer->deserialize($json, Comment::class, 'json');
 
         $this->em->persist($user);
         $this->em->flush();
 
         return $user;
-    }
-
-    public function flush()
-    {
-        $this->em->flush();
     }
 }

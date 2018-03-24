@@ -29,6 +29,12 @@ services:
             - '%env(INSTAG_USERNAME)%'
             - '%env(INSTAG_PASSWORD)%'
 
+    App\EntityEvents\EventRepository:
+        arguments:
+            - '%env(MONGO_URL)%'
+            - '%env(MONGO_DB)%'
+            - "@serializer"
+
 #    InstagramAPI\Instagram:
 #        factory: 'App\Ig\IgFactory:login'
 
@@ -47,7 +53,7 @@ services:
         tags:
             - { name: jms_serializer.event_subscriber }
 
-    OldSound\RabbitMqBundle\RabbitMq\Producer:
+    App\Producer:
         alias: old_sound_rabbit_mq.task_producer
 
     App\EventListener\InterestingUserTaskListener:
@@ -72,6 +78,14 @@ services:
         tags:
             - { name: app.queue_processor }
 
-    App\Consumer\Processor\UpdateMyItemProcessor:
+    App\Consumer\Processor\UpdateItemProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\LikeMyFeedProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UpdateFollowersProcessor:
         tags:
             - { name: app.queue_processor }

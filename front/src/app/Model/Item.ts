@@ -14,5 +14,6 @@ export class Item {
     image_versions2: Array<Media>;
     video_versions: Array<Media>;
     caption: string;
-    carousel_media: Array<Item>
+    carousel_media: Array<Item>;
+    like_count: number;
 }

@@ -5,7 +5,7 @@ namespace App\Controller\Api;
 use App\Consumer\TaskConsumer;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use App\Producer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskController extends FOSRestController

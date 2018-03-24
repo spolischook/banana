@@ -3,13 +3,14 @@
 namespace App\Consumer\Processor;
 
 use App\Consumer\Message;
+use App\Consumer\Processor\Message\MessageInterface;
+use App\Consumer\Processor\Message\TouchUserMessage;
 use App\Ig\IgSingleton;
 use InstagramAPI\Instagram;
 use Psr\Log\LoggerInterface;
 
 class TouchUserProcessor extends AbstractProcessor
 {
-    protected $type = 'touch_user';
     protected $logger;
     /** @var Instagram */
     protected $ig;
@@ -22,9 +23,12 @@ class TouchUserProcessor extends AbstractProcessor
         $this->ig = $igSingleton->getIg();
     }
 
-    public function process(Message $message): void
+    /**
+     * @param MessageInterface|TouchUserMessage $message
+     */
+    public function process(MessageInterface $message): void
     {
-        $userResponse = $this->ig->people->getInfoById($message->data['userId']);
+        $userResponse = $this->ig->people->getInfoById($message->getUserId());
 
         if ($userResponse->getUser()->isIsPrivate()) {
             $this->logger->alert('This is private account, skip it');
@@ -69,6 +73,13 @@ class TouchUserProcessor extends AbstractProcessor
             $this->waitFor(20, 40, 'Wait before next page');
         } while ($maxId !== null && $countOfItemsToLike !== 0);
 
+        $this->ig->people->follow($userResponse->getUser()->getPk());
+
         $this->waitFor(30, 60, 'Wait before next processor');
+    }
+
+    protected function getSupportedMessages(): array
+    {
+        return [TouchUserMessage::class];
     }
 }

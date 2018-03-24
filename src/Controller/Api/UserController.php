@@ -20,7 +20,7 @@ class UserController
      */
     public function getUsersAction(ObjectManager $em)
     {
-            return $em->getRepository(User::class)->findBy(['userType' => null], null, 10);
+            return $em->getRepository(User::class)->findBy(['userType' => User::FOUND], null, 10);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController
      * @Rest\View()
      * @Rest\Patch("/users")
      */
-    public function setUserTypeAction(Request $request, Serializer $serializer, ObjectManager $em)
+    public function patchUserAction(Request $request, Serializer $serializer, ObjectManager $em)
     {
         $serializer->deserialize($request->getContent(), User::class, 'json');
         $em->flush();
