@@ -2,7 +2,6 @@
 
 namespace App\Consumer\Processor\Message;
 
-class UnsubscribeUserMessage
+class UntouchUserMessage extends TouchUserMessage
 {
-
 }

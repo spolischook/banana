@@ -2,51 +2,13 @@
 
 namespace App\Consumer\Processor\Message;
 
-class DiscoverPeopleByTagMessage implements MessageInterface
+class DiscoverPeopleByTagMessage extends AbstractPaginationMessage implements FeedIdInterface
 {
-    /**
-     * @var null|int
-     */
-    protected $pageNumber = null;
-
     /**
      * @var string
      */
     protected $tag;
 
-    /**
-     * @var null|string
-     */
-    protected $maxId;
-
-    /**
-     * @return int|null
-     */
-    public function getPageNumber(): ?int
-    {
-        return $this->pageNumber;
-    }
-
-    /**
-     * @param int|null $pageNumber
-     * @return DiscoverPeopleByTagMessage
-     */
-    public function setPageNumber(?int $pageNumber): DiscoverPeopleByTagMessage
-    {
-        $this->pageNumber = $pageNumber;
-        return $this;
-    }
-
-    public function decreasePageNumber()
-    {
-        if (null === $this->getPageNumber()) {
-            return $this;
-        }
-
-        --$this->pageNumber;
-
-        return $this;
-    }
 
     /**
      * @return string
@@ -66,21 +28,8 @@ class DiscoverPeopleByTagMessage implements MessageInterface
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getMaxId(): ?string
+    public function getFeedId()
     {
-        return $this->maxId;
-    }
-
-    /**
-     * @param null|string $maxId
-     * @return DiscoverPeopleByTagMessage
-     */
-    public function setMaxId(?string $maxId): DiscoverPeopleByTagMessage
-    {
-        $this->maxId = $maxId;
-        return $this;
+        return $this->getTag();
     }
 }

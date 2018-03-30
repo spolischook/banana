@@ -3,17 +3,17 @@
 namespace App\Consumer\Processor;
 
 use App\Consumer\Processor\Message\MessageInterface;
-use App\Consumer\Processor\Message\UpdateFollowersMessage;
+use App\Consumer\Processor\Message\UpdateFollowListUsersMessage;
 use App\Entity\User;
 use App\Ig\IgSingleton;
 use App\Ig\UserManager;
+use App\Producer;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use InstagramAPI\Instagram;
-use App\Producer;
 use Psr\Log\LoggerInterface;
 
-class UpdateFollowersProcessor extends AbstractProcessor
+class UpdateFollowListUsersProcessor extends AbstractProcessor
 {
     protected $logger;
     /** @var Instagram */
@@ -37,15 +37,20 @@ class UpdateFollowersProcessor extends AbstractProcessor
         $this->userManager = $userManager;
     }
 
+    protected function getSupportedMessages(): array
+    {
+        return [UpdateFollowListUsersMessage::class];
+    }
+
     /**
-     * @param MessageInterface|UpdateFollowersMessage $message
+     * @param MessageInterface|UpdateFollowListUsersMessage $message
      */
     public function process(MessageInterface $message): void
     {
-        $this->logger->warning('Update the my followers');
+        $this->logger->warning('Get following list');
         $me = $this->ig->account->getCurrentUser()->getUser();
 
-        $response = $this->ig->people->getFollowers(
+        $response = $this->ig->people->getFollowing(
             $me->getPk(),
             $message->getRankToken(),
             null,
@@ -54,7 +59,7 @@ class UpdateFollowersProcessor extends AbstractProcessor
 
         foreach ($response->getUsers() as $user) {
             $user = $this->userManager->updateOrCreate($user->asJson());
-            $user->setIsFollower(true);
+            $user->setIFollow(true);
             $message->addUser($user->getPk());
         }
 
@@ -66,7 +71,7 @@ class UpdateFollowersProcessor extends AbstractProcessor
         if (null !== $nextMessage->getMaxId()) {
             $this->producer->publish($nextMessage);
         } else {
-            $this->markUnsubscribedUsers($message);
+            $this->markUnfollowingUsers($message);
             $this->logger->info('Last page of followers reached, exit');
             return;
         }
@@ -74,28 +79,23 @@ class UpdateFollowersProcessor extends AbstractProcessor
         $this->waitFor(10, 20, 'Wait for next page of followers');
     }
 
-    protected function getSupportedMessages(): array
-    {
-        return [UpdateFollowersMessage::class];
-    }
-
     /**
-     * @param UpdateFollowersMessage $message
+     * @param UpdateFollowListUsersMessage $message
      */
-    private function markUnsubscribedUsers(UpdateFollowersMessage $message): void
+    private function markUnfollowingUsers(UpdateFollowListUsersMessage $message): void
     {
-        $followers = $this->em->getRepository(User::class)->findBy(['isFollower' => true]);
-        $followerIds = array_map(function (User $user) {
+        $following = $this->em->getRepository(User::class)->findBy(['iFollow' => true]);
+        $followingIds = array_map(function (User $user) {
             return $user->getPk();
-        }, $followers);
+        }, $following);
 
-        $unsubscribeUsers = array_diff($followerIds, $message->getUsers());
+        $unfollowingUsers = array_diff($followingIds, $message->getUsers());
 
-        foreach ($unsubscribeUsers as $unsubscribeUserId) {
-            $unUser = $this->em->getRepository(User::class)->find($unsubscribeUserId);
-            $unUser->setIsFollower(false);
+        foreach ($unfollowingUsers as $unfollowingUserId) {
+            $unUser = $this->em->getRepository(User::class)->find($unfollowingUserId);
+            $unUser->setIFollow(false);
             $this->logger->warning(sprintf(
-                'User "https://www.instagram.com/%s" was unsubscribe',
+                'You are unsubscribe from "https://www.instagram.com/%s"',
                 $unUser->getUsername()
             ));
         }

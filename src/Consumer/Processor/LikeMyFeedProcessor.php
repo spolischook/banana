@@ -47,6 +47,11 @@ class LikeMyFeedProcessor extends AbstractProcessor
 //            $feedItem->printJson();
             $item = $feedItem->getMediaOrAd();
 
+            if (!$item) {
+                $this->logger->info('Post is not a post, skip it');
+                continue;
+            }
+
             if ($item->isHasLiked()) {
                 $this->logger->info(sprintf(
                     'Post "https://www.instagram.com/p/%s" was liked before, skip it',

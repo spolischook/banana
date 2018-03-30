@@ -1,0 +1,41 @@
+App\Entity\User:
+  grateful_user:
+    pk: 'grateful_user'
+    username: 'grateful_user'
+    fullName: 'Grateful User'
+    isPrivate: false
+    isVerified: false
+    isFollower: false
+    iFollow: true
+    userType: 2
+    profilePicUrl: ''
+    profilePicId: ''
+    events:
+      - '@user_type_event1'
+      - '@follow_event'
+  ungrateful_user:
+    pk: 'ungrateful_user'
+    username: 'ungrateful_user'
+    fullName: 'Ungrateful User'
+    isPrivate: false
+    isVerified: false
+    isFollower: false
+    iFollow: true
+    userType: 2
+    profilePicUrl: ''
+    profilePicId: ''
+    events:
+      - '@user_type_event2'
+
+App\Entity\UserFollowEvent:
+  follow_event:
+    date: '<dateTimeBetween("-20 days", "-20 days")>'
+    followingStatus: true
+
+App\Entity\UserTypeEvent:
+  user_type_event1:
+    date: '<dateTimeBetween("-40 days", "-40 days")>'
+    type: 2
+  user_type_event2:
+    date: '<dateTimeBetween("-40 days", "-40 days")>'
+    type: 2

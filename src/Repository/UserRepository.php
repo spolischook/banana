@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\UserEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,16 +20,40 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    /*
-    public function findBySomething($value)
+    /**
+     * Find users that was not active
+     * @param int $activityDays
+     * @return array|User[]
+     */
+    public function findUngratefulUsers(int $activityDays = 30)
     {
-        return $this->createQueryBuilder('u')
-            ->where('u.something = :value')->setParameter('value', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+        $eventCountDql = $this->getEntityManager()->createQueryBuilder()
+            ->select('count(ue.id)')
+            ->from(UserEvent::class, 'ue')
+            ->where('ue.user=u.pk')
+            ->andWhere('ue.date > :date')
+            ->getDQL();
+        $qb = $this->createQueryBuilder('u');
+        $query = $qb
+            ->select('u')
+            ->addSelect(sprintf('(%s) as eventCount', $eventCountDql))
+            ->where('u.isFollower = :isFollower')
+            // Maybe it worth to apply to all users?
+            // Remove this condition along with setParameter
+            ->andWhere('u.userType = :userType')
+            ->andWhere('u.iFollow = :iFollow')
+            ->having('eventCount=0')
+            ->setParameter('isFollower', false)
+            ->setParameter('userType', User::INTERESTING_USER)
+            ->setParameter('iFollow', true)
+            ->setParameter('date', new \DateTime(sprintf('- %d days', $activityDays)))
             ->getQuery()
-            ->getResult()
         ;
+
+        // Because virtual field "eventCount" appears in results
+        // Try to delete "eventCount" from results and remove this array_map
+        return array_map(function ($item) {
+            return $item[0];
+        }, $query->getResult());
     }
-    */
 }

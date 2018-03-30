@@ -28,19 +28,23 @@ class UpdateItemProcessor extends AbstractProcessor
     protected $itemManager;
     protected $userManager;
     protected $commentManager;
+    /** @var EntityManager */
+    protected $em;
 
     public function __construct(
         LoggerInterface $logger,
         IgSingleton $igSingleton,
         ItemManager $itemManager,
         UserManager $userManager,
-        CommentManager $commentManager
+        CommentManager $commentManager,
+        ObjectManager $em
     ) {
         $this->logger = $logger;
         $this->ig = $igSingleton->getIg();
         $this->itemManager = $itemManager;
         $this->userManager = $userManager;
         $this->commentManager = $commentManager;
+        $this->em = $em;
     }
 
     /**
@@ -69,8 +73,29 @@ class UpdateItemProcessor extends AbstractProcessor
 
         $this->userManager->flush();
 
+//        $this->updateComments($item);
+
+        $this->waitFor(10, 20, 'Wait after update item');
+    }
+
+    protected function getSupportedMessages(): array
+    {
+        return [UpdateItemMessage::class];
+    }
+
+    /**
+     * @param Item $item
+     */
+    private function updateComments($item): void
+    {
         $maxId = null;
         $this->logger->info('Update comments');
+        $existingComments = $this->em->getRepository(Comment::class)->findBy(['item' => $item]);
+
+        if (count($existingComments) == $item->getCommentCount()) {
+            $this->logger->info('Count comments the same, skip it');
+            return;
+        }
 
         do {
             try {
@@ -86,16 +111,9 @@ class UpdateItemProcessor extends AbstractProcessor
             foreach ($response->getComments() as $comment) {
                 $this->commentManager->updateOrCreate($comment->asJson());
             }
-            
+
             $maxId = $response->getNextMaxId();
             $this->waitFor(5, 8, 'Wait for next page of comments');
         } while ($maxId !== null);
-
-        $this->waitFor(10, 20, 'Wait after update item');
-    }
-
-    protected function getSupportedMessages(): array
-    {
-        return [UpdateItemMessage::class];
     }
 }

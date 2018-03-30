@@ -5,13 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User
 {
+    const FOUND = 1;
     const INTERESTING_USER = 2;
     const IGNORING_USER = 3;
     const BOT_OR_BUSINESS = 8;
@@ -104,9 +104,21 @@ class User
      */
     private $isFollower = false;
 
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $iFollow = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserEvent", mappedBy="user")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -412,6 +424,46 @@ class User
     public function setIsFollower(bool $isFollower): User
     {
         $this->isFollower = $isFollower;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIFollow(): bool
+    {
+        return $this->iFollow;
+    }
+
+    /**
+     * @param bool $iFollow
+     * @return User
+     */
+    public function setIFollow(bool $iFollow): User
+    {
+        $this->iFollow = $iFollow;
+        return $this;
+    }
+
+    public function getEvents(): ?Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(UserEvent $event)
+    {
+        $this->events->add($event);
+        $event->setUser($this);
+
+        return $this;
+    }
+
+    public function setEvents(array $events): self
+    {
+        foreach ($events as $event) {
+            $this->addEvent($event);
+        };
+
         return $this;
     }
 }

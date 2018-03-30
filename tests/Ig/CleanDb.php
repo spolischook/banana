@@ -2,11 +2,15 @@
 
 namespace App\Tests\Ig;
 
+use App\Tests\Stub\OutputStub;
 use Doctrine\ORM\EntityManager;
+use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Tests\Fixtures\DummyOutput;
+use Symfony\Component\Console\Tests\Output\TestOutput;
 
 abstract class CleanDb extends WebTestCase
 {
@@ -23,16 +27,21 @@ abstract class CleanDb extends WebTestCase
             self::runCommand('doctrine:database:drop --force');
         } catch (\Exception $e) {}
         self::runCommand('doctrine:database:create');
-        self::runCommand('doctrine:schema:update --force');
+        self::runCommand('doctrine:schema:create -n');
         $this->client = static::createClient();
-//        self::runCommand('doctrine:fixtures:load --purge-with-truncate');
     }
 
     protected static function runCommand($command)
     {
         $command = sprintf('%s --quiet', $command);
+        $output = new OutputStub();
+        $code = self::getApplication()->run(new StringInput($command), $output);
 
-        return self::getApplication()->run(new StringInput($command));
+        if (0 !== $code) {
+            self::fail($output->output);
+        }
+
+        return $code;
     }
 
     protected static function getApplication()
@@ -76,5 +85,17 @@ abstract class CleanDb extends WebTestCase
     {
         return $this->client->getContainer()
             ->get('doctrine.orm.entity_manager');
+    }
+
+    protected function loadFixtures($fixture): void
+    {
+        $loader = new NativeLoader();
+        $objectSet = $loader->loadFile($fixture);
+
+        foreach ($objectSet->getObjects() as $user) {
+            $this->getEm()->persist($user);
+        }
+
+        $this->getEm()->flush();
     }
 }

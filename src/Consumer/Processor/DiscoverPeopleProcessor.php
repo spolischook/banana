@@ -3,7 +3,10 @@
 namespace App\Consumer\Processor;
 
 use App\Consumer\Message;
+use App\Consumer\Processor\Message\AbstractPaginationMessage;
+use App\Consumer\Processor\Message\DiscoverPeopleByPlaceMessage;
 use App\Consumer\Processor\Message\DiscoverPeopleByTagMessage;
+use App\Consumer\Processor\Message\FeedIdInterface;
 use App\Consumer\Processor\Message\MessageInterface;
 use App\Entity\User;
 use App\Ig\IgSingleton;
@@ -38,20 +41,20 @@ class DiscoverPeopleProcessor extends AbstractProcessor
     }
 
     /**
-     * @param MessageInterface|DiscoverPeopleByTagMessage $message
+     * @param AbstractPaginationMessage|FeedIdInterface $message
      */
     public function process(MessageInterface $message): void
     {
         $this->logger->warning(sprintf(
-            'Get page of "%s" by tag "%s"',
+            'Get page of "%s" by id "%s"',
             $message->getPageNumber() !== null ? $message->getPageNumber() : 'infinity',
-            $message->getTag()
+            $message->getFeedId()
         ));
-        $response = $this->ig->hashtag->getFeed($message->getTag(), $this->uuid, $message->getMaxId());
+        $response = $this->getFeedSource($message)->getFeed($message->getFeedId(), $this->uuid, $message->getMaxId());
         foreach ($response->getItems() as $item) {
             $user = $item->getUser();
             $jsonUser = $this->ig->people->getInfoByName($user->getUsername())->asJson();
-            $this->logger->info(sprintf('Save "%s" user', $user->getFullName()));
+            $this->logger->info(sprintf('Save "%s" user', $user->getUsername()));
             $user = $this->userManager->updateOrCreate($jsonUser);
 
             if ($user->getUserType() !== null) {
@@ -88,8 +91,27 @@ class DiscoverPeopleProcessor extends AbstractProcessor
         $this->waitFor(5, 10, 'Wait after tag discover page');
     }
 
+    protected function getFeedSource(MessageInterface $message)
+    {
+        switch (get_class($message)) {
+            case DiscoverPeopleByTagMessage::class:
+                return $this->ig->hashtag;
+            case DiscoverPeopleByPlaceMessage::class:
+                return $this->ig->location;
+            default:
+                throw new \InvalidArgumentException(sprintf(
+                    'Class "%s" is not supported by "%s"',
+                    get_class($message),
+                    get_class($this)
+                ));
+        }
+    }
+
     protected function getSupportedMessages(): array
     {
-        return [DiscoverPeopleByTagMessage::class];
+        return [
+            DiscoverPeopleByTagMessage::class,
+            DiscoverPeopleByPlaceMessage::class,
+        ];
     }
 }

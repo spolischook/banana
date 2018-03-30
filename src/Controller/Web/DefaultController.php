@@ -2,13 +2,14 @@
 
 namespace App\Controller\Web;
 
+use App\Consumer\Processor\Message\DiscoverPeopleByPlaceMessage;
 use App\Consumer\Processor\Message\DiscoverPeopleByTagMessage;
 use App\Consumer\Processor\Message\LikeMyFeedMessage;
+use App\Consumer\Processor\Message\UngratefulUsersMessage;
 use App\Consumer\Processor\Message\UpdateFollowersMessage;
+use App\Consumer\Processor\Message\UpdateFollowListUsersMessage;
 use App\Consumer\Processor\Message\UpdateMyFeedMessage;
 use App\Entity\User;
-use App\EntityEvents\EventRepository;
-use App\EntityEvents\UserDiscoverEvent;
 use App\Ig\IgSingleton;
 use App\Producer;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -21,38 +22,35 @@ class DefaultController extends AbstractController
     /**
      * @Route("")
      */
-    public function homeAction(Producer $producer, IgSingleton $igSingleton, ObjectManager $em, EventRepository $eventRepository)
+    public function homeAction(Producer $producer, IgSingleton $igSingleton, ObjectManager $em)
     {
-        $user = $em->getRepository(User::class)->findOneBy([]);
-        $event = new UserDiscoverEvent($user);
-        $eventRepository->insertEvent($event);
-        echo 'done!';
-        exit;
-
-
-
-
-
-
-
-
-
+        $munichLocationId = '213359469';
 
 //        $message = new DiscoverPeopleByTagMessage();
 //        $message
 //            ->setTag('munich')
-//            ->setPageNumber(10);
+//            ->setPageNumber(50);
+
+//        $message = new DiscoverPeopleByPlaceMessage();
+//        $message
+//            ->setLocationId($munichLocationId)
+//            ->setPageNumber(50);
 
 //        $message = new UpdateMyFeedMessage();
-//        $message->setPageNumber(10);
-
-//        $message = new LikeMyFeedMessage();
 //        $message->setPageNumber(20);
 
-        $message = new UpdateFollowersMessage();
+//        $message = new LikeMyFeedMessage();
+//        $message->setPageNumber(10);
+
+//        $message = new UpdateFollowersMessage();
+
+//        $message = new UpdateFollowListUsersMessage();
+
+        $message = new UngratefulUsersMessage();
+
 
         $producer->publish($message);
 
-        return new Response('Home action is work');
+        return new Response('Home action is work'.PHP_EOL);
     }
 }

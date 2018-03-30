@@ -1,0 +1,16 @@
+{
+    "location": {
+        "pk": "213359469",
+        "name": "Munich, Germany",
+        "address": "",
+        "city": "",
+        "short_name": "Munich",
+        "lng": 11.5833,
+        "lat": 48.15,
+        "external_source": "facebook_places",
+        "facebook_places_id": "116045151742857"
+    },
+    "title": "Munich, Germany",
+    "subtitle": "",
+    "media_bundles": []
+}

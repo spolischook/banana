@@ -56,7 +56,7 @@ services:
     App\Producer:
         alias: old_sound_rabbit_mq.task_producer
 
-    App\EventListener\InterestingUserTaskListener:
+    App\EventListener\UserChangeListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
 
@@ -87,5 +87,17 @@ services:
             - { name: app.queue_processor }
 
     App\Consumer\Processor\UpdateFollowersProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UpdateFollowListUsersProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UngratefulUsersProcessor:
+        tags:
+            - { name: app.queue_processor }
+
+    App\Consumer\Processor\UnTouchUserProcessor:
         tags:
             - { name: app.queue_processor }
