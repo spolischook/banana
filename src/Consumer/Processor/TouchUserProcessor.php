@@ -5,7 +5,10 @@ namespace App\Consumer\Processor;
 use App\Consumer\Message;
 use App\Consumer\Processor\Message\MessageInterface;
 use App\Consumer\Processor\Message\TouchUserMessage;
+use App\Entity\User;
 use App\Ig\IgSingleton;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use InstagramAPI\Instagram;
 use Psr\Log\LoggerInterface;
 
@@ -14,13 +17,17 @@ class TouchUserProcessor extends AbstractProcessor
     protected $logger;
     /** @var Instagram */
     protected $ig;
+    /** @var EntityManager */
+    protected $em;
 
     public function __construct(
         LoggerInterface $logger,
-        IgSingleton $igSingleton
+        IgSingleton $igSingleton,
+        ObjectManager $em
     ) {
         $this->logger = $logger;
         $this->ig = $igSingleton->getIg();
+        $this->em = $em;
     }
 
     /**
@@ -74,6 +81,11 @@ class TouchUserProcessor extends AbstractProcessor
         } while ($maxId !== null && $countOfItemsToLike !== 0);
 
         $this->ig->people->follow($userResponse->getUser()->getPk());
+
+        $this->em
+            ->find(User::class, $userResponse->getUser()->getPk())
+            ->setIFollow(true);
+        $this->em->flush();
 
         $this->waitFor(30, 60, 'Wait before next processor');
     }

@@ -60,6 +60,10 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
 
+    App\EventListener\ItemChangeListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
     App\Consumer\TaskConsumer:
         arguments:
             - "@logger"

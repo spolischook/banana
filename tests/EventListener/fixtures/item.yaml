@@ -1,0 +1,6 @@
+App\Entity\Item:
+  test_item:
+    id: '123'
+    pk: 'test'
+    mediaType: 1
+

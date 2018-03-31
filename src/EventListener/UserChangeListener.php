@@ -41,6 +41,8 @@ class UserChangeListener
             $this->changeUserStatusEvent($entity, $em, $changeSet);
             $this->userFollowEvent($entity, $em, $changeSet);
         }
+
+        $em->getUnitOfWork()->computeChangeSets();
     }
 
     protected function userFollowEvent(User $entity, EntityManager $em, array $changeSet)
@@ -57,7 +59,6 @@ class UserChangeListener
             ->setUser($entity);
 
         $em->persist($event);
-        $em->getUnitOfWork()->computeChangeSets();
     }
 
     protected function changeUserStatusEvent(User $entity, EntityManager $em, array $changeSet)

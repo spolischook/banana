@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserLikeEvent extends UserEvent
 {
+    const TYPE_LIKE = 'like';
+    const TYPE_DISLIKE = 'dislike';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,6 +24,12 @@ class UserLikeEvent extends UserEvent
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
     private $item;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $likeDirection;
 
     public function getId()
     {
@@ -36,6 +45,24 @@ class UserLikeEvent extends UserEvent
     {
         $this->item = $item;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLikeDirection(): string
+    {
+        return $this->likeDirection;
+    }
+
+    /**
+     * @param string $likeDirection
+     * @return UserLikeEvent
+     */
+    public function setLikeDirection(string $likeDirection): UserLikeEvent
+    {
+        $this->likeDirection = $likeDirection;
         return $this;
     }
 }

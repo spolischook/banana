@@ -31,11 +31,12 @@ class UngratefulUsersProcessor extends AbstractProcessor
     }
 
     /**
-     * @param MessageInterface $message
+     * @param MessageInterface|UngratefulUsersMessage $message
      */
     public function process(MessageInterface $message): void
     {
-        $ungratefulUsers = $this->userRepository->findUngratefulUsers(1);
+        $ungratefulUsers = $this->userRepository->findUngratefulUsers($message->getUnActiveDays());
+        var_dump(count($ungratefulUsers)); return;
         $count = 300;
 
         foreach ($ungratefulUsers as $ungratefulUser) {
