@@ -11,6 +11,7 @@ export class Item {
     pk: string;
     media_type: number;
     taken_at: number;
+    code: string;
     image_versions2: Array<Media>;
     video_versions: Array<Media>;
     caption: string;

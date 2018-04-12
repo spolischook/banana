@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({
  *     "userType" = "UserTypeEvent",
  *     "like" = "UserLikeEvent",
- *     "follow" = "UserFollowEvent"
+ *     "follow" = "UserFollowEvent",
+ *     "unfollow" = "UserUnfollowEvent"
  * })
  */
 abstract class UserEvent

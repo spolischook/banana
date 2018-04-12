@@ -9,20 +9,4 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserFollowEvent extends UserEvent
 {
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $followingStatus;
-
-    public function getFollowingStatus(): ?bool
-    {
-        return $this->followingStatus;
-    }
-
-    public function setFollowingStatus(bool $followingStatus): self
-    {
-        $this->followingStatus = $followingStatus;
-
-        return $this;
-    }
 }

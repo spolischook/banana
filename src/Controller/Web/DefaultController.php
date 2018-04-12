@@ -29,28 +29,29 @@ class DefaultController extends AbstractController
 //        $message = new DiscoverPeopleByTagMessage();
 //        $message
 //            ->setTag('munich')
-//            ->setPageNumber(50);
-
+//            ->setPageNumber(10);
+//
 //        $message = new DiscoverPeopleByPlaceMessage();
 //        $message
 //            ->setLocationId($munichLocationId)
-//            ->setPageNumber(50);
+//            ->setPageNumber(10);
 
 //        $message = new UpdateMyFeedMessage();
-//        $message->setPageNumber(20);
+//        $message->setPageNumber(10);
 
 //        $message = new LikeMyFeedMessage();
-//        $message->setPageNumber(10);
+//        $message->setPageNumber(20);
 
 //        $message = new UpdateFollowersMessage();
 
 //        $message = new UpdateFollowListUsersMessage();
-
-        $message = new UngratefulUsersMessage();
+//
+//        $message = new UngratefulUsersMessage();
+//        $message->setUnActiveDays(5);
 
 
         $producer->publish($message);
 
-        return new Response('Home action is work'.PHP_EOL);
+        return new Response(sprintf('Message "%s" was added to queue'.PHP_EOL, get_class($message)));
     }
 }

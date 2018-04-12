@@ -6,7 +6,13 @@
 </div>
 <div class="modal-body">
     <div class="card" *ngFor="let item of user.items">
-      <img *ngIf="item.media_type == itemMediaType.PHOTO" src="{{item.image_versions2[1].url}}" width="100%" class="img-thumbnail">
+      <a href="https://www.instagram.com/p/{{item.code}}" target="_blank">
+        <img
+                *ngIf="item.media_type == itemMediaType.PHOTO"
+                src="{{item.image_versions2[1].url}}"
+                width="100%"
+                class="img-thumbnail">
+      </a>
       <video *ngIf="item.media_type == itemMediaType.VIDEO">
         <source src="{{item.video_versions[1].url}}" type="video/mp4">
       </video>

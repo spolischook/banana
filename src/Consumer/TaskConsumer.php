@@ -50,6 +50,13 @@ class TaskConsumer implements ConsumerInterface
             }
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
+            if (strpos($e->getMessage(), 'The EntityManager is closed') !== false) {
+                exit;
+            }
+
+            $wait = 60;
+            $this->logger->info(sprintf('Exception caught, wait for %s seconds', $wait));
+            sleep($wait);
 
             return false;
         }

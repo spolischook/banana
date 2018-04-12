@@ -5,6 +5,7 @@ namespace App\Consumer\Processor;
 use App\Consumer\Processor\Message\MessageInterface;
 use App\Consumer\Processor\Message\UngratefulUsersMessage;
 use App\Consumer\Processor\Message\UntouchUserMessage;
+use App\Entity\User;
 use App\Producer;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
@@ -36,19 +37,20 @@ class UngratefulUsersProcessor extends AbstractProcessor
     public function process(MessageInterface $message): void
     {
         $ungratefulUsers = $this->userRepository->findUngratefulUsers($message->getUnActiveDays());
-        var_dump(count($ungratefulUsers)); return;
-        $count = 300;
+//        var_dump(count($ungratefulUsers));
+//        return;
 
+        /** @var User $ungratefulUser */
         foreach ($ungratefulUsers as $ungratefulUser) {
-            $message = new UntouchUserMessage();
-            $message->setUserId($ungratefulUser->getPk());
+            $unTouchMessage = new UntouchUserMessage();
+            $unTouchMessage->setUserId($ungratefulUser->getPk());
             $this->logger->info(sprintf(
                 'User "https://www.instagram.com/%s" unactive, unsubscribe him',
                 $ungratefulUser->getUsername()
             ));
-//            $this->producer->publish($message);
-//            $count--;
-            if ($count <= 0) {
+            $this->producer->publish($unTouchMessage);
+            $message->decreaseProcessingCount();
+            if ($message->getMaxProcessing() <= 0) {
                 return;
             }
         }

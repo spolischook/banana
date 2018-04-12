@@ -5,6 +5,9 @@ import {User, UserType} from "../Model/User";
 import * as moment from 'moment';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {DiscoverUsersModalComponent} from "../discover-users-modal/discover-users-modal.component";
+import {
+    debounceTime, distinctUntilChanged, switchMap, switchAll
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-discover-users',
@@ -13,7 +16,8 @@ import {DiscoverUsersModalComponent} from "../discover-users-modal/discover-user
 })
 export class DiscoverUsersComponent implements OnInit {
 
-  public users;
+  public users: Array<User> = [];
+  public usersCount;
   private decision;
   constructor(
       private http: HttpClient,
@@ -21,9 +25,8 @@ export class DiscoverUsersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.http.get(`${environment.apiUrl}/users`).subscribe({
-        next: (users: Array<User>) => this.users = users
-    });
+    this.getUsers();
+    this.updateUsersCount();
   }
 
   public showItemDetails(user: User) {
@@ -40,7 +43,6 @@ export class DiscoverUsersComponent implements OnInit {
       newUser.user_type = UserType.INTERESTING_USER;
 
       this.updateUser(newUser);
-      user.user_type = UserType.INTERESTING_USER;
   }
 
   public setAsNotInteresting(user: User) {
@@ -49,16 +51,45 @@ export class DiscoverUsersComponent implements OnInit {
       newUser.user_type = UserType.IGNORING_USER;
 
       this.updateUser(newUser);
-      user.user_type = UserType.IGNORING_USER;
   }
 
   public updateUser(user: User) {
       this.http.patch(`${environment.apiUrl}/users`, user).subscribe({
-          next: () => {}
-      })
+          next: () => {
+              this.updateUsersCount();
+              this.getUsers();
+          }
+      });
+      this.removeUser(user);
   }
 
   fromUnixToDate(unixTimeStamp) {
       return moment.unix(unixTimeStamp).format("MM/DD/YYYY");
+  }
+
+  removeUser(targetUser: User) {
+      for (let i in this.users) {
+          let k = +i; // Now compiler and tslint are happy
+          if (this.users[i].pk == targetUser.pk) {
+              this.users.splice(k, 1);
+          }
+      }
+  }
+
+  updateUsersCount() {
+      this.http.get(`${environment.apiUrl}/users/count`).subscribe({
+          next: (count: number) => this.usersCount = count
+      });
+  }
+
+  getUsers() {
+      this.http
+          .get(`${environment.apiUrl}/users`)
+          // .pipe(
+          //     // debounceTime(300),
+          //     switchAll()
+          //     // switchMap(a => a)
+          // )
+          .subscribe((users: Array<User>) => this.users = users);
   }
 }

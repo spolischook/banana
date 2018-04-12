@@ -30,7 +30,6 @@ App\Entity\User:
 App\Entity\UserFollowEvent:
   follow_event:
     date: '<dateTimeBetween("-20 days", "-20 days")>'
-    followingStatus: true
 
 App\Entity\UserTypeEvent:
   user_type_event1:

@@ -1,7 +1,12 @@
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div class="clearfix"></div>
+<h3 *ngIf="usersCount">Discovered Users <span class="badge badge-secondary">{{usersCount}}</span></h3>
 <div *ngIf="users">
   <div class="card-columns">
     <div class="card" *ngFor="let user of users">
-      <div *ngIf="user.user_type == 1">
+      <div>
         <img (click)="showItemDetails(user)" class="card-img-top" src="{{user.profile_pic_url}}" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title" (click)="showItemDetails(user)">{{user.full_name}} ({{user.username}})</h5>

@@ -21,6 +21,23 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getFoundUserCount()
+    {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('count(u.pk)')
+            ->where('u.userType=:type')
+            ->setParameter('type', User::FOUND)
+            ->from(User::class, 'u')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * Find users that was not active
      * @param int $activityDays
      * @return array|User[]

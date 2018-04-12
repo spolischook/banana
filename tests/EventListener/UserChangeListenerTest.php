@@ -5,6 +5,7 @@ namespace App\Tests\EventListener;
 use App\Entity\User;
 use App\Entity\UserFollowEvent;
 use App\Entity\UserTypeEvent;
+use App\Entity\UserUnfollowEvent;
 use App\Tests\Ig\CleanDb;
 use Doctrine\ORM\EntityManager;
 use Nelmio\Alice\Loader\NativeLoader;
@@ -29,17 +30,33 @@ class UserChangeListenerTest extends CleanDb
 
     private function checkFollowEvent(User $user)
     {
-        self::assertNull($this->getEm()->getRepository(UserFollowEvent::class)->findOneBy([]));
+        $followEventRepository = $this->getEm()->getRepository(UserFollowEvent::class);
+        $unfollowEventRepository = $this->getEm()->getRepository(UserUnfollowEvent::class);
+
+        self::assertCount(0, $followEventRepository->findAll());
+        self::assertCount(0, $unfollowEventRepository->findAll());
         $user->setIsFollower(true);
 
         $this->getEm()->flush();
 
         /** @var UserFollowEvent $userFollowEvent */
-        $userFollowEvent = $this->getEm()->getRepository(UserFollowEvent::class)->findOneBy([]);
+        $userFollowEvent = $followEventRepository->findOneBy([]);
 
         self::assertNotNull($userFollowEvent);
-        self::assertTrue($userFollowEvent->getFollowingStatus());
         self::assertEquals($user->getPk(), $userFollowEvent->getUser()->getPk());
+
+        // Unfollow event still null
+        self::assertCount(0, $unfollowEventRepository->findAll());
+
+        $user->setIsFollower(false);
+        $this->getEm()->flush();
+
+        self::assertCount(1, $followEventRepository->findAll());
+        /** @var UserUnfollowEvent $userUnfollowEvent */
+        $userUnfollowEvent = $unfollowEventRepository->findOneBy([]);
+
+        self::assertNotNull($userUnfollowEvent);
+        self::assertEquals($user->getPk(), $userUnfollowEvent->getUser()->getPk());
     }
 
     private function checkUserTypeEvent(User $user): void

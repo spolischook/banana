@@ -29,11 +29,11 @@ class CommentManager
 
     public function updateOrCreate(string $json): Comment
     {
-        $user = $this->serializer->deserialize($json, Comment::class, 'json');
+        $comment = $this->serializer->deserialize($json, Comment::class, 'json');
 
-        $this->em->persist($user);
+        $this->em->persist($comment);
         $this->em->flush();
 
-        return $user;
+        return $comment;
     }
 }

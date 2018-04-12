@@ -62,6 +62,16 @@ class DiscoverPeopleProcessor extends AbstractProcessor
                 continue;
             }
 
+            if ($user->isFollower()) {
+                $this->logger->error('User already follower');
+                continue;
+            }
+
+            if ($user->isIFollow()) {
+                $this->logger->error('User already followed');
+                continue;
+            }
+
             $user->setUserType(User::FOUND);
             $this->logger->info('Save users timeline feed');
             $feed = $this->ig->timeline->getUserFeed($user->getPk());

@@ -7,6 +7,7 @@ use App\Consumer\Processor\Message\TouchUserMessage;
 use App\Entity\UserTypeEvent;
 use App\Entity\User;
 use App\Entity\UserFollowEvent;
+use App\Entity\UserUnfollowEvent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use App\Producer;
@@ -53,10 +54,13 @@ class UserChangeListener
 
         list($oldValue, $newValue) = $changeSet['isFollower'];
 
-        $event = new UserFollowEvent();
-        $event
-            ->setFollowingStatus($newValue)
-            ->setUser($entity);
+        if (true === $newValue) {
+            $event = new UserFollowEvent();
+        } else {
+            $event = new UserUnfollowEvent();
+        }
+
+        $event->setUser($entity);
 
         $em->persist($event);
     }
