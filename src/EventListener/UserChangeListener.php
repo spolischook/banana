@@ -2,7 +2,6 @@
 
 namespace App\EventListener;
 
-use App\Consumer\Message;
 use App\Consumer\Processor\Message\TouchUserMessage;
 use App\Entity\UserTypeEvent;
 use App\Entity\User;
@@ -75,7 +74,8 @@ class UserChangeListener
 
         $event = new UserTypeEvent();
         $event
-            ->setType($newValue)
+            ->setNewType($newValue)
+            ->setOldType($oldValue)
             ->setUser($entity);
 
         $em->persist($event);

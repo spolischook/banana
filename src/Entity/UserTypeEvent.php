@@ -19,22 +19,38 @@ class UserTypeEvent extends UserEvent
     /**
      * @ORM\Column(type="integer")
      */
-    private $type;
+    private $oldType;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $newType;
 
     public function getId()
     {
         return $this->id;
     }
 
-    public function getType(): ?int
+    public function getOldType(): ?int
     {
-        return $this->type;
+        return $this->oldType;
     }
 
-    public function setType(int $type): self
+    public function setOldType(int $oldType): self
     {
-        $this->type = $type;
+        $this->oldType = $oldType;
 
+        return $this;
+    }
+
+    public function getNewType(): ?int
+    {
+        return $this->newType;
+    }
+
+    public function setNewType($newType): self
+    {
+        $this->newType = $newType;
         return $this;
     }
 }

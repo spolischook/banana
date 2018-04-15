@@ -47,6 +47,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="comments")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
     private $item;
 
@@ -188,19 +189,16 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getItem()
+    public function getItem(): ?Item
     {
         return $this->item;
     }
 
     /**
-     * @param mixed $item
+     * @param Item $item
      * @return Comment
      */
-    public function setItem($item)
+    public function setItem($item): Comment
     {
         $this->item = $item;
         return $this;

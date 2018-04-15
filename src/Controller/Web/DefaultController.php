@@ -37,7 +37,7 @@ class DefaultController extends AbstractController
 //            ->setPageNumber(10);
 
 //        $message = new UpdateMyFeedMessage();
-//        $message->setPageNumber(10);
+//        $message->setPageNumber(1);
 
 //        $message = new LikeMyFeedMessage();
 //        $message->setPageNumber(20);

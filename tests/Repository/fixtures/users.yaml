@@ -34,7 +34,7 @@ App\Entity\UserFollowEvent:
 App\Entity\UserTypeEvent:
   user_type_event1:
     date: '<dateTimeBetween("-40 days", "-40 days")>'
-    type: 2
+    newType: 2
   user_type_event2:
     date: '<dateTimeBetween("-40 days", "-40 days")>'
-    type: 2
+    newType: 2

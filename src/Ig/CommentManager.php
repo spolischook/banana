@@ -3,6 +3,7 @@
 namespace App\Ig;
 
 use App\Entity\Comment;
+use App\Entity\Item;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
@@ -27,9 +28,11 @@ class CommentManager
         $this->em = $em;
     }
 
-    public function updateOrCreate(string $json): Comment
+    public function updateOrCreate(string $json, Item $item): Comment
     {
+        /** @var Comment $comment */
         $comment = $this->serializer->deserialize($json, Comment::class, 'json');
+        $comment->setItem($item);
 
         $this->em->persist($comment);
         $this->em->flush();

@@ -1,0 +1,35 @@
+App\Entity\User:
+  user:
+    pk: 'user'
+    username: 'user'
+    fullName: 'User'
+    isPrivate: false
+    isVerified: false
+    isFollower: false
+    iFollow: true
+    userType: 2
+    profilePicUrl: ''
+    profilePicId: ''
+    events:
+      - '@event_1'
+      - '@event_2'
+      - '@event_3'
+      - '@event_4'
+
+App\Entity\UserTypeEvent:
+  event_1:
+    date: '<dateTimeBetween("-1 days", "-1 days")>'
+    newType: 2
+
+App\Entity\UserFollowEvent:
+  event_2:
+    date: '<dateTimeBetween("-3 days", "-3 days")>'
+
+App\Entity\UserUnfollowEvent:
+  event_3:
+    date: '<dateTimeBetween("-5 days", "-5 days")>'
+
+App\Entity\UserLikeEvent:
+  event_4:
+    date: '<dateTimeBetween("-7 days", "-7 days")>'
+

@@ -70,7 +70,7 @@ class UserChangeListenerTest extends CleanDb
         $userTypeEvent = $this->getEm()->getRepository(UserTypeEvent::class)->findOneBy([]);
 
         self::assertNotNull($userTypeEvent);
-        self::assertEquals(User::INTERESTING_USER, $userTypeEvent->getType());
+        self::assertEquals(User::INTERESTING_USER, $userTypeEvent->getOldType());
         self::assertEquals($user->getPk(), $userTypeEvent->getUser()->getPk());
     }
 

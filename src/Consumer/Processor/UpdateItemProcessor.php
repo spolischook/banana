@@ -73,7 +73,7 @@ class UpdateItemProcessor extends AbstractProcessor
 
         $this->userManager->flush();
 
-//        $this->updateComments($item);
+        $this->updateComments($item);
 
         $this->waitFor(10, 20, 'Wait after update item');
     }
@@ -109,7 +109,7 @@ class UpdateItemProcessor extends AbstractProcessor
             }
 
             foreach ($response->getComments() as $comment) {
-                $this->commentManager->updateOrCreate($comment->asJson());
+                $this->commentManager->updateOrCreate($comment->asJson(), $item);
             }
 
             $maxId = $response->getNextMaxId();

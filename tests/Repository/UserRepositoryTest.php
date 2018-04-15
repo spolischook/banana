@@ -7,7 +7,7 @@ use App\Tests\Ig\CleanDb;
 
 class UserRepositoryTest extends CleanDb
 {
-    public function testFindUnrequitedUsers()
+    public function testFindUngratefulUsers()
     {
         $this->loadFixtures(__DIR__.'/fixtures/users.yaml');
         /** @var User[] $users */

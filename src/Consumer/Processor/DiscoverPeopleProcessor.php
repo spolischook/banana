@@ -18,6 +18,11 @@ use Psr\Log\LoggerInterface;
 
 class DiscoverPeopleProcessor extends AbstractProcessor
 {
+    const MIN_MEDIA_COUNT = 10;
+    const MAX_FOLLOWER_COUNT = 10000;
+    const MAX_FOLLOWING_COUNT = 3000;
+    const MIN_FOLLOW_BACK_RATIO = 0.05;
+
     protected $logger;
     protected $uuid;
     protected $ig;
@@ -69,6 +74,29 @@ class DiscoverPeopleProcessor extends AbstractProcessor
 
             if ($user->isIFollow()) {
                 $this->logger->error('User already followed');
+                continue;
+            }
+
+            if (self::MIN_MEDIA_COUNT > $user->getMediaCount()) {
+                $this->logger->error('User has too few (10<) posts');
+                continue;
+            }
+
+            if (self::MAX_FOLLOWER_COUNT < $user->getFollowerCount()) {
+                $this->logger->error('User has too much (> 10000) followers');
+                continue;
+            }
+
+            if (self::MAX_FOLLOWING_COUNT < $user->getFollowingCount()) {
+                $this->logger->error('User too much following (>2000), it\'s a robot?');
+                continue;
+            }
+
+            if (
+                0 === $user->getFollowerCount() ||
+                self::MIN_FOLLOW_BACK_RATIO > $user->getFollowingCount()/$user->getFollowerCount()
+            ) {
+                $this->logger->error('User has too low followback rate');
                 continue;
             }
 

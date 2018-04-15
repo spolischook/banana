@@ -1,0 +1,56 @@
+{
+  "pk": "17938595020060777",
+  "user_id": "1593614854",
+  "text": "Ой все, я теперь жду множество фоток 😁",
+  "type": 0,
+  "created_at": "1523620137",
+  "created_at_utc": "1523620137",
+  "content_type": "comment",
+  "status": "Active",
+  "bit_flags": 0,
+  "user": {
+    "pk": "1593614854",
+    "username": "ekaterina.murenko",
+    "full_name": "Graphic designer, Illustrator",
+    "is_private": false,
+    "profile_pic_url": "https://instagram.furt1-1.fna.fbcdn.net/vp/9fc3b84799da64652a9ac40784623938/5B5DD2ED/t51.2885-19/s150x150/23969977_1140441486087419_4815118621871177728_n.jpg",
+    "profile_pic_id": "1657179088236164656_1593614854",
+    "is_verified": false
+  },
+  "did_report_as_spam": false,
+  "has_translation": true,
+  "has_liked_comment": false,
+  "comment_like_count": 0,
+  "child_comment_count": 1,
+  "preview_child_comments": [
+    {
+      "content_type": "comment",
+      "user": {
+        "pk": "499678136",
+        "username": "tetianacherevan",
+        "full_name": "Tetiana Cherevan",
+        "has_anonymous_profile_picture": false,
+        "is_private": false,
+        "is_verified": false,
+        "profile_pic_url": "https://instagram.furt1-1.fna.fbcdn.net/vp/6e10d3ef30babfdb6b771931abb8b5ae/5B673FC9/t51.2885-19/s150x150/28151713_814590292063777_5613944837704253440_n.jpg",
+        "profile_pic_id": "1684455320637551840_499678136",
+        "allowed_commenter_type": "any",
+        "reel_auto_archive": "on"
+      },
+      "pk": "17865162739230313",
+      "text": "@ekaterina.murenko да! Будут фотоотчеты!🤩",
+      "type": 2,
+      "created_at": "1523622638",
+      "created_at_utc": "1523651438",
+      "media_id": "1756568785521024239",
+      "status": "Active",
+      "parent_comment_id": "17938595020060777",
+      "has_liked_comment": false,
+      "comment_like_count": 1
+    }
+  ],
+  "other_preview_users": [],
+  "has_more_tail_child_comments": false,
+  "has_more_head_child_comments": false,
+  "inline_composer_display_condition": "never"
+}

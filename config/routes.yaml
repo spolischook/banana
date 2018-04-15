@@ -1,3 +1,7 @@
 api_users:
     type:     rest
     resource: App\Controller\Api\UserController
+
+api_user_events:
+    type:     rest
+    resource: App\Controller\Api\UserEventController

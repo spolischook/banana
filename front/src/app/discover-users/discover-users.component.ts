@@ -8,6 +8,7 @@ import {DiscoverUsersModalComponent} from "../discover-users-modal/discover-user
 import {
     debounceTime, distinctUntilChanged, switchMap, switchAll
 } from 'rxjs/operators';
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-discover-users',
@@ -15,7 +16,8 @@ import {
   styleUrls: ['./discover-users.component.scss']
 })
 export class DiscoverUsersComponent implements OnInit {
-
+  public proceedUserGoal = 500;
+  public actualProceedUser = 0;
   public users: Array<User> = [];
   public usersCount;
   private decision;
@@ -27,6 +29,7 @@ export class DiscoverUsersComponent implements OnInit {
   ngOnInit() {
     this.getUsers();
     this.updateUsersCount();
+    this.updateProceedUserCount();
   }
 
   public showItemDetails(user: User) {
@@ -61,6 +64,7 @@ export class DiscoverUsersComponent implements OnInit {
           }
       });
       this.removeUser(user);
+      this.actualProceedUser++;
   }
 
   fromUnixToDate(unixTimeStamp) {
@@ -79,6 +83,21 @@ export class DiscoverUsersComponent implements OnInit {
   updateUsersCount() {
       this.http.get(`${environment.apiUrl}/users/count`).subscribe({
           next: (count: number) => this.usersCount = count
+      });
+  }
+
+  updateProceedUserCount() {
+      let params = new HttpParams();
+      params = params.set('from', moment().format("YYYY-MM-DD"));
+      params = params.set('to', moment().format("YYYY-MM-DD"));
+      params = params.append('discr[]', 'userType');
+      this.http.get(
+          `${environment.apiUrl}/user-events/count`,
+          {
+              params: params
+          }
+      ).subscribe({
+          next: (count: number) => this.actualProceedUser = count
       });
   }
 

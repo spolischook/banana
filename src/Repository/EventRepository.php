@@ -19,6 +19,43 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, UserEvent::class);
     }
 
+    public function getEvents(
+        \DateTime $from = null,
+        \DateTime $to = null,
+        array $discr = null
+    ) {
+        $qb = $this->createQueryBuilder('ue');
+
+        if ($discr) {
+            $discrMap = $this->getEntityManager()->getClassMetadata(UserEvent::class)->discriminatorMap;
+
+            foreach ($discr as $item) {
+                if (!isset($discrMap[$item])) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Discriminator field "%s" is not registered',
+                        $item
+                    ));
+                }
+
+                $qb->orWhere($qb->expr()->isInstanceOf('ue', $discrMap[$item]));
+            }
+        }
+
+        if ($from) {
+            $qb
+                ->andWhere('ue.date > :dateFrom')
+                ->setParameter('dateFrom', $from);
+        }
+
+        if ($to) {
+            $qb
+                ->andWhere('ue.date < :dateTo')
+                ->setParameter('dateTo', $to);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Event[] Returns an array of Event objects
 //     */
